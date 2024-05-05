@@ -1,0 +1,21 @@
+<h3>Az-App</h3>
+<ul>
+    <li *ngFor="let cat of cats">
+        {{ cat.name }} - {{ cat.age }}
+        <button (click)="editCat(cat)">Edit</button>
+        &nbsp;
+        <button (click)="deleteCat(cat)">Delete</button>
+    </li>
+</ul>
+
+<form (submit)="onSubmit()">
+    <label>Name:</label>
+    <input type="text" [(ngModel)]="catForm.name" name="name" required>
+
+    <label>Age:</label>
+    <input type="number" [(ngModel)]="catForm.age" name="age" required>
+
+    <button type="submit">{{ isEditing ? 'Update' : 'Add' }}</button>
+</form>
+
+<router-outlet></router-outlet>
