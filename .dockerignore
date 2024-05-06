@@ -1,0 +1,16 @@
+.nx
+#.nxignore
+
+node_modules
+/dist
+/tmp
+
+*.log
+*.md
+.git
+.gitignore
+.idea
+.vscode
+.dockerignore
+.dockerfile
+Dockerfile
