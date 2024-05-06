@@ -20,7 +20,7 @@ async function bootstrap() {
   const globalPrefix = configService.get('GLOBAL_PREFIX');
   app.setGlobalPrefix(globalPrefix);
 
-  const port = configService.get<number>('PORT');
+  const port = configService.get<number>('BACKEND_PORT');
   await app.listen(port);
 
   Logger.log(

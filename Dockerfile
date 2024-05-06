@@ -28,7 +28,7 @@ COPY package*.json /app
 RUN npm install --only=production --omit=dev
 COPY --chown=node:node --from=build /build/dist/apps/api /app/api
 
-ENV PORT=3000
+ENV BACKEND_PORT=3000
 ENV GLOBAL_PREFIX=api
 # Start the Nginx server and NestJS API
 CMD ["sh", "-c", "nginx && node api/main.js"]
