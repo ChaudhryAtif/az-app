@@ -2,7 +2,6 @@
 #.nxignore
 
 #node_modules
-npm-debug.log
 /dist
 /tmp
 
@@ -13,5 +12,4 @@ npm-debug.log
 .idea
 .vscode
 .dockerignore
-.dockerfile
-.dockerignore
+Dockerfile
