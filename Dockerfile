@@ -1,34 +1,34 @@
 ## Build the application
 FROM node:18.16.1 AS build
 
-# Set working directory
-WORKDIR /usr/src/app
+WORKDIR /build
 
-# Copy package.json and install dependencies
-COPY package*.json ./
+COPY package*.json /build
 RUN npm install
 
-# Copy the entire project
 COPY --chown=node:node . .
 
-# Build the api and web app
 RUN npm run build-docker
 
-## Setup Nginx and serve the application
-FROM nginx:1.25-alpine
+FROM node:18.16.1 AS prod
 
-# Copy built Angular files into Nginx public directory
-COPY --chown=node:node --from=build /usr/src/app/dist/apps/web /usr/share/nginx/html
+# Install nginx
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nginx \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY ./nginx/conf/prod/default.conf /etc/nginx/sites-enabled/default
+COPY --chown=node:node --from=build /build/dist/apps/web /usr/share/nginx/html
+COPY ./nginx/conf/custom_error_pages/502.html /usr/share/nginx/html/custom_error_pages/502.html
 
 # Copy NestJS api built files
-COPY --chown=node:node --from=build /usr/src/app/dist/apps/api /usr/src/api
 
-# Copy Nginx configuration
-COPY --chown=node:node ./nginx/conf/prod/default.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
+COPY package*.json /app
+RUN npm install --only=production --omit=dev
+COPY --chown=node:node --from=build /build/dist/apps/api /app/api
 
-# Expose the port on which the application will be served
-EXPOSE 80
-
+ENV PORT=3000
+ENV GLOBAL_PREFIX=api
 # Start the Nginx server and NestJS API
-# CMD ["sh", "-c", "nginx -g 'daemon off;' & node /usr/src/api/main.js"]
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["sh", "-c", "nginx && node api/main.js"]
