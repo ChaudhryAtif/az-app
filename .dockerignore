@@ -1,0 +1,17 @@
+.nx
+#.nxignore
+
+#node_modules
+npm-debug.log
+/dist
+/tmp
+
+*.log
+*.md
+.git
+.gitignore
+.idea
+.vscode
+.dockerignore
+.dockerfile
+.dockerignore
